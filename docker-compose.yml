@@ -1,0 +1,11 @@
+# Docker Compose file for development purposes.
+# Can be used to set up a local instance of Solr.
+
+version: "2"
+services:
+  solr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8983:8983"
