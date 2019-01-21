@@ -1,0 +1,60 @@
+{
+  "initArgs":{},
+  "initializedOn":"2019-01-21T21:09:59.011Z",
+  "updatedSinceInit":"2019-01-21T22:01:14.113Z",
+  "managedList":[
+    {
+      "name":"descriptionLength",
+      "class":"org.apache.solr.ltr.feature.FieldLengthFeature",
+      "params":{"field":"description"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"descriptionScore",
+      "class":"org.apache.solr.ltr.feature.SolrFeature",
+      "params":{"q":"{!field f=description} ${query}"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"freshness",
+      "class":"org.apache.solr.ltr.feature.SolrFeature",
+      "params":{"q":"{!func}recip( ms(NOW,timestamp), 3.16e-11, 1, 1)"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"highlightsScore",
+      "class":"org.apache.solr.ltr.feature.SolrFeature",
+      "params":{"q":"{!field f=highlights} ${query}"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"linksLength",
+      "class":"org.apache.solr.ltr.feature.FieldLengthFeature",
+      "params":{"field":"links"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"listsScore",
+      "class":"org.apache.solr.ltr.feature.SolrFeature",
+      "params":{"q":"{!field f=lists} ${query}"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"originalScore",
+      "class":"org.apache.solr.ltr.feature.OriginalScoreFeature",
+      "params":null,
+      "store":"_DEFAULT_"},
+    {
+      "name":"paragraphsScore",
+      "class":"org.apache.solr.ltr.feature.SolrFeature",
+      "params":{"q":"{!field f=paragraphs} ${query}"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"sectionsScore",
+      "class":"org.apache.solr.ltr.feature.SolrFeature",
+      "params":{"q":"{!field f=sections} ${query}"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"titleLength",
+      "class":"org.apache.solr.ltr.feature.FieldLengthFeature",
+      "params":{"field":"title"},
+      "store":"_DEFAULT_"},
+    {
+      "name":"titleScore",
+      "class":"org.apache.solr.ltr.feature.SolrFeature",
+      "params":{"q":"{!field f=title} ${query}"},
+      "store":"_DEFAULT_"}]}
