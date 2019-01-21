@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <luceneMatchVersion>7.6.0</luceneMatchVersion>
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-ltr-\d.*\.jar" />
+  <dataDir>${solr.data.dir:}</dataDir>
+  <directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}" />
+  <codecFactory class="solr.SchemaCodecFactory" />
+  <indexConfig>
+    <lockType>${solr.lock.type:native}</lockType>
+    <infoStream>true</infoStream>
+  </indexConfig>
+  <updateHandler class="solr.DirectUpdateHandler2">
+    <updateLog>
+      <str name="dir">${solr.ulog.dir:}</str>
+      <int name="numVersionBuckets">${solr.ulog.numVersionBuckets:65536}</int>
+    </updateLog>
+    <autoCommit>
+      <maxTime>${solr.autoCommit.maxTime:100000}</maxTime>
+    </autoCommit>
+    <autoSoftCommit>
+      <maxTime>${solr.autoSoftCommit.maxDocs:10000}</maxTime>
+    </autoSoftCommit>
+  </updateHandler>
+  <query>
+    <maxBooleanClauses>1024</maxBooleanClauses>
+    <slowQueryThresholdMillis>-1</slowQueryThresholdMillis>
+    <filterCache class="solr.FastLRUCache" size="512" initialSize="512" autowarmCount="0" />
+    <queryResultCache class="solr.LRUCache" size="512" initialSize="512" autowarmCount="0" />
+    <documentCache class="solr.LRUCache" size="512" initialSize="512" autowarmCount="0" />
+    <cache enable="${solr.ltr.enabled:true}" name="QUERY_DOC_FV" class="solr.search.LRUCache" size="4096" initialSize="2048" autowarmCount="4096" regenerator="solr.search.NoOpRegenerator" />
+    <enableLazyFieldLoading>true</enableLazyFieldLoading>
+    <queryResultWindowSize>20</queryResultWindowSize>
+    <queryResultMaxDocsCached>200</queryResultMaxDocsCached>
+  </query>
+  <requestDispatcher handleSelect="false">
+    <requestParsers enableRemoteStreaming="true" multipartUploadLimitInKB="2048000" formdataUploadLimitInKB="2048" addHttpRequestToContext="false" />
+    <httpCaching never304="true" />
+  </requestDispatcher>
+  <requestHandler name="/select" class="solr.SearchHandler">
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <int name="rows">25</int>
+      <str name="wt">json</str>
+      <str name="indent">true</str>
+      <str name="df">text</str>
+    </lst>
+  </requestHandler>
+  <initParams path="/update/**,/select">
+    <lst name="defaults">
+      <str name="df">text</str>
+    </lst>
+  </initParams>
+  <searchComponent name="terms" class="solr.TermsComponent" />
+  <requestHandler name="/terms" class="solr.SearchHandler" startup="lazy">
+    <lst name="defaults">
+      <bool name="terms">true</bool>
+      <bool name="distrib">false</bool>
+    </lst>
+    <arr name="components">
+      <str>terms</str>
+    </arr>
+  </requestHandler>
+  <queryResponseWriter name="json" class="solr.JSONResponseWriter">
+    <str name="content-type">text/plain; charset=UTF-8</str>
+  </queryResponseWriter>
+  <queryParser enable="${solr.ltr.enabled:true}" name="ltr" class="org.apache.solr.ltr.search.LTRQParserPlugin" />
+  <transformer enable="${solr.ltr.enabled:true}" name="features" class="org.apache.solr.ltr.response.transform.LTRFeatureLoggerTransformerFactory">
+    <str name="fvCacheName">QUERY_DOC_FV</str>
+  </transformer>
+</config>

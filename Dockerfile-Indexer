@@ -1,5 +1,4 @@
 FROM python:3.7-alpine
-RUN apk add bash vim; pip install flask pysolr ipython click
+RUN pip install pysolr click
 COPY ./simple-wikipedia.json.gz .
 COPY ./indexer.py .
-

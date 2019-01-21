@@ -8,3 +8,4 @@ COPY ./wikipedia $SOLR_HOME/mycores/wikipedia
 # and fix permissions
 RUN chown -R solr:solr $SOLR_HOME/mycores/wikipedia
 USER $SOLR_USER
+ENV SOLR_JAVA_MEM "-Xms2g -Xmx4g"

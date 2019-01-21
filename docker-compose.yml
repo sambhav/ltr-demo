@@ -11,15 +11,14 @@ services:
       - "8983:8983"
     volumes:
       - solr-data:/opt/solr/server/solr/mycores/
-  app:
+  indexer:
     build:
       context: .
-      dockerfile: Dockerfile-python
-    ports:
-      - "5000:5000"
+      dockerfile: Dockerfile-Indexer
     depends_on:
       - solr
     command: >
-      /bin/bash -c "chmod +x indexer.py; ./indexer.py delete; ./indexer.py index --input simple-wikipedia.json.gz"
+      /bin/sh -c "python indexer.py delete; python indexer.py index --input simple-wikipedia.json.gz"
+ 
 volumes:
   solr-data:

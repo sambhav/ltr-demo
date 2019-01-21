@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/local/bin/python
 import gzip
 import json
 
@@ -6,6 +6,7 @@ import pysolr
 import click
 
 SOLR_URL = "http://solr:8983/solr/wikipedia"
+
 USED_FIELDS = [
     "description",
     "highlights",
@@ -18,6 +19,7 @@ USED_FIELDS = [
     "timestamp",
     "title",
     "type",
+    "wikiTitle"
 ]
 
 
@@ -32,12 +34,12 @@ def parse_article(line):
         return None
     article["id"] = article["wid"]
     if "paragraphs" in article and len(article["paragraphs"]) > 0:
-        article['description'] = article['paragraphs'][0]
+        article["description"] = article["paragraphs"][0]
     if "links" in article:
         links = []
         for link in article["links"]:
             links.append(link["description"])
-        article["links"] = links    
+        article["links"] = links
     for field in list(article.keys()):
         if field not in USED_FIELDS:
             del article[field]
@@ -54,19 +56,23 @@ def delete_existing_index():
 
 @cli.command("index")
 @click.option("--input", type=click.Path(), required=True)
-@click.option("--commit-freq", default=1000, type=int)
-def index_collection(input, commit_freq):
+@click.option("--post-freq", default=1000, type=int)
+@click.option("--limit", default=10000, type=int)
+def index_collection(input, post_freq, limit):
     solr = pysolr.Solr(SOLR_URL, timeout=10)
     click.echo("Starting indexing data...")
     with gzip.open(input, "r") as finput:
         articles = []
+        total = 0
         for line in finput:
             article = parse_article(line)
             if article:
                 articles.append(article)
-            if len(articles) % commit_freq == 0:
+                total += 1
+            if total == limit:
+                break
+            if len(articles) % post_freq == 0:
                 solr.add(articles)
-                solr.commit()
                 articles = []
         solr.add(articles)
         solr.commit()
