@@ -1,7 +1,7 @@
 import json
 import logging
 import pysolr
-from flaskapp.constants import RANKERS_PATH, SOLR_URI
+from flaskapp.constants import RANKERS_PATH, SOLR_URI, ANNOTATIONS_PATH
 
 logger = logging.getLogger(__name__)
 RQ_QUERY = "{{!ltr efi.query={} model={}}}"
@@ -10,6 +10,12 @@ FL_LIST = "features:[features],score,title,wikiTitle,id"
 
 class InvalidRankerException(Exception):
     pass
+
+
+def get_annotated_queries():
+    with open(ANNOTATIONS_PATH) as f:
+        annotations_data = json.load(f)
+        return annotations_data.keys()
 
 
 def get_rankers():
@@ -32,6 +38,7 @@ def get_results_for_ranker(query, ranker):
     params = {}
     params["rq"] = RQ_QUERY.format(query, ranker)
     params["fl"] = FL_LIST
+    params["rows"] = 10
     logger.info(query, RQ_QUERY, FL_LIST)
     results = solr.search(query, **params)
     return results

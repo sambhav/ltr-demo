@@ -6,3 +6,7 @@ body {
 .tab-content {
     padding-top: 20px;
 }
+
+.btn {
+    margin-left: 10px;
+}
