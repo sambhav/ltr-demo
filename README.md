@@ -18,10 +18,16 @@ wget https://github.com/samj1912/ltr-demo/releases/download/data-dump/simple-wik
 docker-compose build
 docker-compose up -d solr
 ```
+4. Solr will then be reachable on `http://localhost:8983/solr`
 4. To index the above dump run
 ```
 docker-compose up indexer
 ```
+5. To bring up the web app for annotations and model comparisons run -
+```
+docker-compose up -d webapp
+```
+6. The web app will be available on `http://localhost:5000`
 
 ## Annotations and Training
 
