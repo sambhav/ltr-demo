@@ -1,0 +1,11 @@
+{
+  "initArgs":{},
+  "initializedOn":"2019-01-27T13:17:34.077Z",
+  "managedList":[{
+      "name":"originalScoreModel",
+      "class":"org.apache.solr.ltr.model.LinearModel",
+      "store":"_DEFAULT_",
+      "features":[{
+          "name":"originalScore",
+          "norm":{"class":"org.apache.solr.ltr.norm.IdentityNormalizer"}}],
+      "params":{"weights":{"originalScore":1.0}}}]}
