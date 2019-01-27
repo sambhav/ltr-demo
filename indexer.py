@@ -19,7 +19,7 @@ USED_FIELDS = [
     "timestamp",
     "title",
     "type",
-    "wikiTitle"
+    "wikiTitle",
 ]
 
 
