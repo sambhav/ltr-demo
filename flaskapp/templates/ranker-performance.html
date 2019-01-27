@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Learning to Rank Demo</title>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link href="static/css/compare.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="btn-group float-right">
+        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{selected_ranker}}
+        </button>
+        <div class="dropdown-menu">
+          {% for ranker in rankers %}
+          <a class="dropdown-item {{ 'active' if ranker==selected_ranker }}" href="/ranker={{ranker}}">{{ranker}}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link" id="stats-tab" href="/stats" role="tab" aria-selected="false">Stats</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" id="ranker-tab" href="/ranker" role="tab" aria-selected="true">Ranker Performance</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="col-sm-12">
+          <div class="tab-pane fade active show" id="ranker" role="tabpanel" aria-labelledby="ranker-tab">
+            <div id="accordion">
+              {% for query in results %}
+              <div class="card">
+                <div class="card-header d-flex align-items-center" id="heading" data-toggle="collapse" data-target="#collapse{{loop.index}}" aria-expanded="true" aria-controls="collapse{{loop.index}}">
+                  <h5 class="mb-0 text-secondary mr-auto">
+                    {{query}}
+                  </h5>
+                  {% for metric in results[query]['metrics'] %}
+                  <button type="button" class="btn btn-primary btn-sm active">
+                  {{metric}}: <span class="text-light">{{results[query]['metrics'][metric]}}</span>
+                  </button>
+                  {% endfor %}
+                </div>
+                <div id="collapse{{loop.index}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                      {% for doc in results[query]['docs'] %}
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="https://simple.wikipedia.org/wiki/{{doc['wikiTitle']}}">
+                        {{doc['title']}}
+                        </a>
+                        {% if doc['relevant'] %}
+                        <button class="btn btn-success btn-sm">Relevant</button>
+                        {% else %}
+                        <button class="btn btn-danger btn-sm">Not relevant</button>
+                        {% endif %}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="static/js/jquery.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
