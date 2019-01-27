@@ -24,7 +24,7 @@ def homepage():
         except InvalidRankerException:
             return abort(404)
         else:
-            return render_template("rankers.html", query=query, results=results)
+            return render_template("rankers.html", query=query, results=results['originalScoreModel'])
 
 
 @app.route("/stats", methods=["GET"])

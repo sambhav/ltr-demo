@@ -5,7 +5,8 @@ from flaskapp.constants import RANKERS_PATH, SOLR_URI, ANNOTATIONS_PATH
 
 logger = logging.getLogger(__name__)
 RQ_QUERY = "{{!ltr efi.query={} model={}}}"
-FL_LIST = "features:[features],score,title,wikiTitle,id"
+FL_LIST = "features:[features],score,title,wikiTitle,id,description"
+
 
 
 class InvalidRankerException(Exception):
@@ -23,13 +24,11 @@ def get_rankers():
         rankers_data = json.load(f)
         return list(rankers_data.keys())
 
-
 def get_results(query):
     results = {}
     for ranker in get_rankers():
         results[ranker] = get_results_for_ranker(query, ranker)
     return results
-
 
 def get_results_for_ranker(query, ranker):
     if ranker not in get_rankers():
