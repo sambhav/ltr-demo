@@ -11,6 +11,7 @@ from flaskapp.query import (
 )
 
 app = Flask(__name__)
+dataset = Dataset()
 
 
 @app.route("/", methods=["GET"])
@@ -20,7 +21,10 @@ def homepage():
     else:
         query = request.args.get("query")
         try:
-            results = get_results(query)
+            results = get_results_for_ranker(query, "originalScoreModel")
+            for doc in results: 
+                key = doc['wikiTitle']
+                doc['relevance'] = dataset.get_relevance(query, key)
         except InvalidRankerException:
             return abort(404)
         else:

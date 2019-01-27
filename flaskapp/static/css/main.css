@@ -36,6 +36,14 @@ a:hover, a:visited, a:link, a:active {
   overflow: hidden;
 }
 
+.relevance0 {
+  color: red !important
+}
+.relevance1 {
+  color: green !important
+}
+
+
 .result:hover {
   box-shadow: 0px 3px 8px 0px #999;
 }
