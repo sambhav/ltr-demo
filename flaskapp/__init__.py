@@ -20,4 +20,11 @@ def homepage():
 
 @app.route("/compare", methods=["GET"])
 def compare():
-    return render_template("compare.html")
+    metrics = ["P@10", "R@10", "F@10"]
+    rankers = {
+        "originalScore": [1.0, 1.0, 1.0],
+        "originalScore1": [1.0, 1.0, 1.0],
+        "originalScore2": [1.0, 1.0, 1.0],
+        "originalScore3": [1.0, 1.0, 1.0],
+    }
+    return render_template("compare.html", metrics=metrics, rankers=rankers)
