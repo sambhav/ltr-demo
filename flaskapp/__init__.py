@@ -16,3 +16,8 @@ def homepage():
             return abort(404)
         else:
             return render_template("rankers.html", query=query, results=results)
+
+
+@app.route("/compare", methods=["GET"])
+def compare():
+    return render_template("compare.html")
