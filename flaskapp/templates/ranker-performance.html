@@ -38,7 +38,7 @@
                   </h5>
                   {% for metric in results[query]['metrics'] %}
                   <button type="button" class="btn btn-primary btn-sm active">
-                  {{metric}}: <span class="text-light">{{results[query]['metrics'][metric]}}</span>
+                  {{metric.name}}: <span class="text-light">{{metric.value}}</span>
                   </button>
                   {% endfor %}
                 </div>

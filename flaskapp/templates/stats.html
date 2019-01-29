@@ -22,17 +22,17 @@
             <thead class="thead-dark">
               <tr>
                 <th scope="col">Ranker</th>
-                {% for metric_name in metrics %}
+                {% for metric_name in metric_names %}
                 <th scope="col">{{metric_name}}</th>
                 {% endfor %}
               </tr>
             </thead>
             <tbody>
-              {% for ranker in rankers %}
+              {% for ranker in metrics %}
               <tr>
                 <th scope="row">{{ranker}}</th>
-                {% for metric in rankers[ranker] %}
-                <td>{{metric}}</td>
+                {% for metric in metrics[ranker]['average'] %}
+                <td>{{metric.value}}</td>
                 {% endfor %}
               </tr>
               {% endfor %}

@@ -6,10 +6,10 @@ from flaskapp.query import (
     get_results,
     InvalidRankerException,
     get_results_for_ranker,
-    get_annotated_queries,
     get_rankers,
 )
 from flaskapp.dataset import Dataset
+from flaskapp.metrics import evaluate_ranker
 
 app = Flask(__name__)
 dataset = Dataset()
@@ -43,20 +43,17 @@ def annotate():
 
 @app.route("/stats", methods=["GET"])
 def stats():
-    metrics = ["P@10", "R@10", "F@10"]
-    rankers = {
-        "originalScore": [1.0, 1.0, 1.0],
-        "originalScore1": [1.0, 1.0, 1.0],
-        "originalScore2": [1.0, 1.0, 1.0],
-        "originalScore3": [1.0, 1.0, 1.0],
-    }
-    ranker = request.args.get("ranker", DEFAULT_RANKER)
-    results = collections.defaultdict(dict)
-    for query in get_annotated_queries():
-        results[query]["docs"] = get_results_for_ranker(query, ranker)
-        results[query]["metrics"] = {"F@10": 1.0, "R@10": 1.0, "P@10": 1.0}
+    rankers = get_rankers()
+    metric_names = []
+    metrics = {}
+    for ranker in rankers:
+        metrics[ranker] = evaluate_ranker(ranker, dataset, 10)
+        if not metric_names:
+            for metric in metrics[ranker]['average']:
+                metric_names.append(metric.name)
+    print(metrics)
     return render_template(
-        "stats.html", metrics=metrics, rankers=rankers, results=results
+        "stats.html", metric_names=metric_names, metrics=metrics
     )
 
 
@@ -67,11 +64,12 @@ def ranker():
     if selected_ranker not in rankers:
         return Response("Invalid Ranker"), 404
     results = collections.defaultdict(dict)
-    for query in get_annotated_queries():
+    metrics = evaluate_ranker(selected_ranker, dataset, 10)
+    for query in dataset.get_queries():
         results[query]["docs"] = get_results_for_ranker(query, selected_ranker)
         for doc in results[query]["docs"]:
             doc["relevant"] = dataset.get_relevance(query, doc["wikiTitle"])
-        results[query]["metrics"] = {"F@10": "1.0", "R@10": "1.0", "P@10": "1.0"}
+        results[query]["metrics"] = metrics['queries'][query]
     return render_template(
         "ranker-performance.html",
         results=results,

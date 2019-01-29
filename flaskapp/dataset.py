@@ -38,7 +38,7 @@ class Dataset:
 
     def get_docs(self, query):
         """Returns a map with the relevances of the documents given the query"""
-        return self.dataset[query]
+        return self.dataset.get(query, [])
 
     def get_relevant_docs(self, query):
         """Returns the number of relevance documents for the query"""
@@ -51,7 +51,6 @@ class Dataset:
     def get_queries(self):
         """Returns all the query annotated"""
         queries = list(self.dataset.keys())
-
         queries.sort()
         return queries
 
