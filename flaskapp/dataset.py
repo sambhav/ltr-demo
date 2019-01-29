@@ -1,12 +1,12 @@
 import json
 import os
+from flaskapp.constants import ANNOTATIONS_PATH
 
 
 class Dataset:
-    def __init__(self, name="dataset"):
+    def __init__(self):
         """Creates or loads a dataset containining relevance annotations"""
-        self.name = name
-        self.filename = name + ".json"
+        self.filename = ANNOTATIONS_PATH
         if os.path.exists(self.filename):
             with open(self.filename, "r") as fin:
                 self.dataset = json.load(fin)

@@ -1,6 +1,6 @@
 import collections
 import random
-from flask import Flask, request, render_template, abort, Response
+from flask import Flask, request, render_template, abort, Response, jsonify
 from flaskapp.constants import DEFAULT_RANKER
 from flaskapp.query import (
     get_results,
@@ -9,8 +9,6 @@ from flaskapp.query import (
     get_annotated_queries,
     get_rankers,
 )
-import json
-
 from flaskapp.dataset import Dataset
 
 app = Flask(__name__)
@@ -40,7 +38,7 @@ def annotate():
     docid = request.args.get("docid")
     rel = int(request.args.get("rel"))
     dataset.annotate(query, docid, rel)
-    return json.dumps(True)
+    return jsonify(True)
 
 
 @app.route("/stats", methods=["GET"])
@@ -72,7 +70,7 @@ def ranker():
     for query in get_annotated_queries():
         results[query]["docs"] = get_results_for_ranker(query, selected_ranker)
         for doc in results[query]["docs"]:
-            doc["relevant"] = random.choice([True, False])
+            doc["relevant"] = dataset.get_relevance(query, doc["wikiTitle"])
         results[query]["metrics"] = {"F@10": "1.0", "R@10": "1.0", "P@10": "1.0"}
     return render_template(
         "ranker-performance.html",

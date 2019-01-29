@@ -1,7 +1,7 @@
 {
     "42": {
         "1941\u201342_NHL_season": 0,
-        "42": 2,
+        "42": 1,
         "42_(answer)": 4,
         "42_(disambiguation)": 0,
         "42_(movie)": 0,
@@ -67,7 +67,7 @@
         "Air_Berlin": 0,
         "Battle_of_Berlin": 0,
         "Battle_of_Berlin_(air)": 0,
-        "Berlin": 0,
+        "Berlin": 1,
         "Berlin,_New_Hampshire": 0,
         "Berlin_Blockade": 2,
         "Berlin_Hauptbahnhof": 2,
@@ -77,6 +77,7 @@
         "Berlin_Wall": 2,
         "Berliner_(doughnut)": 0,
         "Boroughs_of_Berlin": 2,
+        "Category:Berlin": 0,
         "Category:Boroughs_in_Berlin": 1,
         "Category:Districts_of_Berlin": 0,
         "Category:Mayors_of_Berlin": 0,
@@ -85,6 +86,7 @@
         "Gro\u00df-Berlin": 0,
         "Irving_Berlin": 0,
         "Isaiah_Berlin": 0,
+        "Klaus_Wowereit": 0,
         "List_of_mayors_of_Berlin": 0,
         "Olympiastadion_Berlin": 0,
         "Technical_University_of_Berlin": 0,
@@ -94,7 +96,8 @@
         "Treaty_of_Berlin_(1889)": 0,
         "Treaty_of_Berlin_(1899)": 0,
         "Treaty_of_Berlin_(1926)": 0,
-        "West_Berlin": 2
+        "West_Berlin": 2,
+        "undefined": 0
     },
     "bloom filter": {
         "Bloom": 0,
@@ -272,6 +275,11 @@
         "FTSE_100_Index": 2,
         "John_Laing_plc": 3,
         "London_Stock_Exchange": 2
+    },
+    "hitler": {
+        "Adolf_Hitler": 1,
+        "Mein_Kampf": 1,
+        "Nazi_Germany": 1
     },
     "indonesia": {
         "Aceh,_Indonesia": 0,
@@ -714,7 +722,7 @@
         "Melania_Trump": 2,
         "Omarosa_Manigault-Stallworth": 0,
         "Paleoconservatism": 0,
-        "President_of_the_United_States": 3,
+        "President_of_the_United_States": 1,
         "Protests_against_Donald_Trump": 3,
         "San_Diego_Comic-Con_International": 0,
         "Slovenia": 0,
