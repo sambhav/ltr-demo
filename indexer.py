@@ -41,7 +41,7 @@ def parse_article(line):
     if "links" in article:
         links = []
         for link in article["links"]:
-            links.append(link["description"])
+            links.append(link["anchor"])
         article["links"] = links
     for field in list(article.keys()):
         if field not in USED_FIELDS:
