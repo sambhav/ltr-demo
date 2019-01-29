@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 import gzip
 import json
+import re
 
 import pysolr
 import click
@@ -22,6 +23,8 @@ USED_FIELDS = [
     "wikiTitle",
 ]
 
+TEMPLATE_PATTERN = re.compile(r"TEMPLATE\[.*\]", flags=re.M)
+
 
 @click.group()
 def cli():
@@ -34,7 +37,7 @@ def parse_article(line):
         return None
     article["id"] = article["wid"]
     if "paragraphs" in article and len(article["paragraphs"]) > 0:
-        article["description"] = article["paragraphs"][0]
+        article["description"] = re.sub(TEMPLATE_PATTERN, "", article["paragraphs"][0])
     if "links" in article:
         links = []
         for link in article["links"]:

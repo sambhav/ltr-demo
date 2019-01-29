@@ -8,14 +8,49 @@
   </head>
   <body>
     <div class="container">
-    <div class="row">
-      <div class="col-sm-10 col-sm-offset-1">
-        <form class="form-signin" role="form">
-          <input type="text" id="query" name="query" class="form-control" placeholder="Enter Your Search Query" autofocus value="{{query}}"/>
-        </form>
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+          <form class="form-signin" role="form">
+            <input type="text" id="query" name="query" class="form-control" placeholder="Enter Your Search Query" autofocus value="{{query}}"/>
+          </form>
+        </div>
       </div>
+      {% if results is defined %}
+      <div class="col-sm-10">
+        <h3 class="text-left">Search results</h3>
+        {% for doc in results %}
+        <div class="result">
+          <div class="result-content">
+            <div class="result-title">
+              <h4>
+                <strong>
+                <a href="https://simple.wikipedia.org/wiki/{{doc['wikiTitle']}}">
+                {{ doc["title"] }}
+                </a>
+                </strong>
+                <div class='float-right'>
+                  {% if doc['relevance']%}
+                  <button id='button{{loop.index}}' onclick="updateRelevance('{{query}}','{{doc['wikiTitle']}}',{{loop.index}})" class="btn btn-success btn-sm">Relevant</button>
+                  {% else %}
+                  <button id='button{{loop.index}}' onclick="updateRelevance('{{query}}','{{doc['wikiTitle']}}',{{loop.index}})" class="btn btn-danger btn-sm">Not relevant</button>
+                  {% endif %}
+                </div>
+              </h4>
+            </div>
+            {% if doc["description"] != "" %}
+            <div id="bodyA{{ loop.index }}">{{ doc["description"] }}</div>
+            {% endif %}
+          </div>
+          <!-- result-content -->
+        </div>
+        <!-- result -->
+        {% endfor %}
+      </div>
+      <!--col -->
     </div>
+    {% endif %}
     <script src="static/js/jquery.js"></script>
     <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/main.js"></script>
   </body>
 </html>
