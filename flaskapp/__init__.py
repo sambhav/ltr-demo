@@ -51,7 +51,6 @@ def stats():
         if not metric_names:
             for metric in metrics[ranker]['average']:
                 metric_names.append(metric.name)
-    print(metrics)
     return render_template(
         "stats.html", metric_names=metric_names, metrics=metrics
     )
