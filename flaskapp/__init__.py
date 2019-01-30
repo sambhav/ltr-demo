@@ -2,12 +2,7 @@ import collections
 import random
 from flask import Flask, request, render_template, abort, Response, jsonify
 from flaskapp.constants import DEFAULT_RANKER
-from flaskapp.query import (
-    get_results,
-    InvalidRankerException,
-    get_results_for_ranker,
-    get_rankers,
-)
+from flaskapp.query import InvalidRankerException, get_results_for_ranker, get_rankers
 from flaskapp.dataset import Dataset
 from flaskapp.metrics import evaluate_ranker
 
@@ -49,11 +44,9 @@ def stats():
     for ranker in rankers:
         metrics[ranker] = evaluate_ranker(ranker, dataset, 10)
         if not metric_names:
-            for metric in metrics[ranker]['average']:
+            for metric in metrics[ranker]["average"]:
                 metric_names.append(metric.name)
-    return render_template(
-        "stats.html", metric_names=metric_names, metrics=metrics
-    )
+    return render_template("stats.html", metric_names=metric_names, metrics=metrics)
 
 
 @app.route("/ranker", methods=["GET"])
@@ -68,7 +61,7 @@ def ranker():
         results[query]["docs"] = get_results_for_ranker(query, selected_ranker)
         for doc in results[query]["docs"]:
             doc["relevant"] = dataset.get_relevance(query, doc["wikiTitle"])
-        results[query]["metrics"] = metrics['queries'][query]
+        results[query]["metrics"] = metrics["queries"][query]
     return render_template(
         "ranker-performance.html",
         results=results,
