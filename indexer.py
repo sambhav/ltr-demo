@@ -2,6 +2,7 @@
 import gzip
 import json
 import re
+from concurrent.futures import ProcessPoolExecutor
 
 import pysolr
 import click
@@ -57,28 +58,32 @@ def delete_existing_index():
     solr.commit()
 
 
+def process_articles(articles):
+    solr = pysolr.Solr(SOLR_URL, timeout=10)
+    processed_articles = filter(bool, map(parse_article, articles))
+    solr.add(processed_articles)
+
+
 @cli.command("index")
 @click.option("--input", type=click.Path(), required=True)
 @click.option("--post-freq", default=1000, type=int)
-@click.option("--limit", default=10000, type=int)
-def index_collection(input, post_freq, limit):
-    solr = pysolr.Solr(SOLR_URL, timeout=10)
-    click.echo("Starting indexing data...")
+def index_collection(input, post_freq):
     with gzip.open(input, "r") as finput:
-        articles = []
-        total = 0
-        for line in finput:
-            article = parse_article(line)
-            if article:
-                articles.append(article)
-                total += 1
-            if total == limit:
-                break
-            if len(articles) % post_freq == 0:
-                solr.add(articles)
-                articles = []
-        solr.add(articles)
-        solr.commit()
+        click.echo("Reading input file...")
+        articles = finput.readlines()
+        click.echo("Input loaded.")
+        click.echo("Document indexing in progress...")
+        article_chunks = [
+            articles[i : i + post_freq] for i in range(0, len(articles), post_freq)
+        ]
+        with ProcessPoolExecutor(max_workers=4) as executor:
+            with click.progressbar(
+                executor.map(process_articles, article_chunks),
+                length=len(article_chunks),
+            ) as tasks:
+                # Iterating through the tasks just to execute them
+                for task in tasks:
+                    pass
 
 
 if __name__ == "__main__":
