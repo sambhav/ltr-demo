@@ -9,7 +9,7 @@ FL_LIST = "features:[features],score,title,wikiTitle,id,description"
 
 
 class InvalidRankerException(Exception):
-    
+
     def __init__(self, ranker_name):
         super().__init__(f"Invalid Ranker name:{ranker_name}")
 
@@ -39,7 +39,6 @@ def get_results_for_ranker(query, ranker):
     params = {}
     params["rq"] = RQ_QUERY.format(query, ranker)
     params["fl"] = FL_LIST
-    params["rows"] = 10
     logger.info(query, RQ_QUERY, FL_LIST)
     results = solr.search(query, **params).docs
     return results
