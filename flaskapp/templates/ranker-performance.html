@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Learning to Rank Demo</title>
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    <link href="static/css/compare.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/compare.css') }}" rel="stylesheet">
   </head>
   <body>
     <div class="container">
@@ -14,7 +14,7 @@
         </button>
         <div class="dropdown-menu">
           {% for ranker in rankers %}
-          <a class="dropdown-item {{ 'active' if ranker==selected_ranker }}" href="/ranker={{ranker}}">{{ranker}}</a>
+          <a class="dropdown-item {{ 'active' if ranker==selected_ranker }}" href="{{url_for('ranker', selected_ranker=ranker)}}">{{ranker}}</a>
           {% endfor %}
         </div>
       </div>
@@ -34,7 +34,9 @@
               <div class="card">
                 <div class="card-header d-flex align-items-center" id="heading" data-toggle="collapse" data-target="#collapse{{loop.index}}" aria-expanded="true" aria-controls="collapse{{loop.index}}">
                   <h5 class="mb-0 text-secondary mr-auto">
-                    {{query}}
+                    <a href="{{url_for('homepage')}}?query={{query}}">
+                      {{query}}
+                    </a>
                   </h5>
                   {% for metric in results[query]['metrics'] %}
                   <button type="button" class="btn btn-primary btn-sm active">
@@ -67,7 +69,7 @@
         </div>
       </div>
     </div>
-    <script src="static/js/jquery.js"></script>
-    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
   </body>
 </html>

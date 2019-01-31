@@ -1,13 +1,17 @@
 import collections
 import random
-from flask import Flask, request, render_template, abort, Response, jsonify
-from flaskapp.constants import DEFAULT_RANKER
-from flaskapp.query import (
-    get_results,
-    InvalidRankerException,
-    get_results_for_ranker,
-    get_rankers,
+from flask import (
+    Flask,
+    request,
+    render_template,
+    abort,
+    Response,
+    jsonify,
+    url_for,
+    redirect,
 )
+from flaskapp.constants import DEFAULT_RANKER
+from flaskapp.query import InvalidRankerException, get_results_for_ranker, get_rankers
 from flaskapp.dataset import Dataset
 from flaskapp.metrics import evaluate_ranker
 
@@ -45,21 +49,24 @@ def annotate():
 def stats():
     rankers = get_rankers()
     metric_names = []
-    metrics = {}
+    metrics = collections.defaultdict(list)
     for ranker in rankers:
-        metrics[ranker] = evaluate_ranker(ranker, dataset, 10)
-        if not metric_names:
-            for metric in metrics[ranker]['average']:
-                metric_names.append(metric.name)
-    return render_template(
-        "stats.html", metric_names=metric_names, metrics=metrics
-    )
+        for k in [5, 10]:
+            metrics[ranker] += evaluate_ranker(ranker, dataset, k)["average"]
+    for metric in metrics[ranker]:
+        if metric.name not in metric_names:
+            metric_names.append(metric.name)
+    return render_template("stats.html", metric_names=metric_names, metrics=metrics)
 
 
 @app.route("/ranker", methods=["GET"])
-def ranker():
+def ranker_home():
+    return redirect(url_for("ranker", selected_ranker=DEFAULT_RANKER))
+
+
+@app.route("/ranker/<selected_ranker>", methods=["GET"])
+def ranker(selected_ranker):
     rankers = get_rankers()
-    selected_ranker = request.args.get("ranker", DEFAULT_RANKER)
     if selected_ranker not in rankers:
         return Response("Invalid Ranker"), 404
     results = collections.defaultdict(dict)
@@ -68,7 +75,7 @@ def ranker():
         results[query]["docs"] = get_results_for_ranker(query, selected_ranker)
         for doc in results[query]["docs"]:
             doc["relevant"] = dataset.get_relevance(query, doc["wikiTitle"])
-        results[query]["metrics"] = metrics['queries'][query]
+        results[query]["metrics"] = metrics["queries"][query]
     return render_template(
         "ranker-performance.html",
         results=results,

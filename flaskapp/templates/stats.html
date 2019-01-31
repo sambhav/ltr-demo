@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Learning to Rank Demo</title>
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    <link href="static/css/compare.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/compare.css') }}" rel="stylesheet">
   </head>
   <body>
     <div class="container">
@@ -30,8 +30,12 @@
             <tbody>
               {% for ranker in metrics %}
               <tr>
-                <th scope="row">{{ranker}}</th>
-                {% for metric in metrics[ranker]['average'] %}
+                <th scope="row">
+                  <a href="{{url_for('ranker', selected_ranker=ranker)}}">
+                    {{ranker}}
+                  </a>
+                </th>
+                {% for metric in metrics[ranker] %}
                 <td>{{metric.value}}</td>
                 {% endfor %}
               </tr>
@@ -41,7 +45,7 @@
         </div>
       </div>
     </div>
-    <script src="static/js/jquery.js"></script>
-    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
   </body>
 </html>

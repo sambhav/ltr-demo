@@ -3,13 +3,13 @@ from collections import namedtuple
 
 from flaskapp.query import get_results_for_ranker
 
-class Metric:
 
+class Metric:
     def __init__(self, name, value):
         self.name = name
         self._value = None
         self.value = value
-    
+
     def __repr__(self):
         return f"{self.name}: {self.value}"
 
@@ -19,10 +19,11 @@ class Metric:
     @property
     def value(self):
         return self._value
-    
+
     @value.setter
     def value(self, value):
         self._value = round(value, 2)
+
 
 class MetricsCalculator:
     def __init__(self, dataset, query, results, k=-1):
@@ -38,7 +39,7 @@ class MetricsCalculator:
     def relevant_doc_count(self):
         if not self.dataset or not self.results:
             return 0
-        return sum(map(lambda doc: self.is_relevant(doc['wikiTitle']), self.results))
+        return sum(map(lambda doc: self.is_relevant(doc["wikiTitle"]), self.results))
 
     @property
     def precision(self):
@@ -82,13 +83,11 @@ def evaluate_ranker(ranker, dataset, k):
     num_queries = len(queries)
     for query in queries:
         results = get_results(query)
-        metrics = MetricsCalculator(
-            dataset, query, results, k=k
-        ).get_all_metrics()
+        metrics = MetricsCalculator(dataset, query, results, k=k).get_all_metrics()
         query_evaluations[query] = metrics
         for i, metric in enumerate(metrics):
             avg_metrics[i] += metric
-    evaluation['average'] = avg_metrics
+    evaluation["average"] = avg_metrics
     for metric in avg_metrics:
         metric.value /= num_queries
     return evaluation
