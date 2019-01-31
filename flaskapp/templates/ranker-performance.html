@@ -34,7 +34,9 @@
               <div class="card">
                 <div class="card-header d-flex align-items-center" id="heading" data-toggle="collapse" data-target="#collapse{{loop.index}}" aria-expanded="true" aria-controls="collapse{{loop.index}}">
                   <h5 class="mb-0 text-secondary mr-auto">
-                    {{query}}
+                    <a href="{{url_for('homepage')}}?query={{query}}">
+                      {{query}}
+                    </a>
                   </h5>
                   {% for metric in results[query]['metrics'] %}
                   <button type="button" class="btn btn-primary btn-sm active">

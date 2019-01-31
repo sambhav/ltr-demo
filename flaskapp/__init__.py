@@ -49,12 +49,13 @@ def annotate():
 def stats():
     rankers = get_rankers()
     metric_names = []
-    metrics = {}
+    metrics = collections.defaultdict(list)
     for ranker in rankers:
-        metrics[ranker] = evaluate_ranker(ranker, dataset, 10)
-        if not metric_names:
-            for metric in metrics[ranker]["average"]:
-                metric_names.append(metric.name)
+        for k in [5, 10]:
+            metrics[ranker] += evaluate_ranker(ranker, dataset, k)["average"]
+    for metric in metrics[ranker]:
+        if metric.name not in metric_names:
+            metric_names.append(metric.name)
     return render_template("stats.html", metric_names=metric_names, metrics=metrics)
 
 

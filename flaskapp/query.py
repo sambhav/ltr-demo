@@ -1,10 +1,16 @@
 import json
 import logging
 import pysolr
-from flaskapp.constants import RANKERS_PATH, SOLR_URI, ANNOTATIONS_PATH, DEFAULT_RANKER
+import requests
+from flaskapp.constants import (
+    SOLR_MODEL_STORE_URL,
+    SOLR_URI,
+    ANNOTATIONS_PATH,
+    DEFAULT_RANKER,
+)
 
 logger = logging.getLogger(__name__)
-RQ_QUERY = "{{!ltr efi.query={} model={}}}"
+RQ_QUERY = "{{!ltr efi.query={} model={} reRankDocs=25}}"
 FL_LIST = "features:[features],score,title,wikiTitle,id,description"
 
 
@@ -20,9 +26,8 @@ def get_annotated_queries():
 
 
 def get_rankers():
-    with open(RANKERS_PATH) as f:
-        rankers_data = json.load(f)
-        return rankers_data
+    response = requests.get(SOLR_MODEL_STORE_URL)
+    return [model["name"] for model in response.json()["models"]]
 
 
 def get_results(query):
@@ -36,6 +41,7 @@ def get_results_for_ranker(query, ranker):
     params = {}
     params["rq"] = RQ_QUERY.format(query, ranker)
     params["fl"] = FL_LIST
+    params["rows"] = 50
     logger.info(query, RQ_QUERY, FL_LIST)
     results = solr.search(query, **params).docs
     return results

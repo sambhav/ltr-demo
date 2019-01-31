@@ -30,8 +30,12 @@
             <tbody>
               {% for ranker in metrics %}
               <tr>
-                <th scope="row">{{ranker}}</th>
-                {% for metric in metrics[ranker]['average'] %}
+                <th scope="row">
+                  <a href="{{url_for('ranker', selected_ranker=ranker)}}">
+                    {{ranker}}
+                  </a>
+                </th>
+                {% for metric in metrics[ranker] %}
                 <td>{{metric.value}}</td>
                 {% endfor %}
               </tr>
