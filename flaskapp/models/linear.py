@@ -7,6 +7,7 @@ from flaskapp.training_data_generator import generate_training_data
 class LinearModel:
     def __init__(self):
         self.weights = {}
+        self.name = f"linear-model-{int(time.time())}"
 
     def train(self):
         training_data = generate_training_data()
@@ -29,7 +30,7 @@ class LinearModel:
     def to_json(self):
         model = {
             "class": "org.apache.solr.ltr.model.LinearModel",
-            "name": f"linear-model-{int(time.time())}",
+            "name": self.name,
             "features": [{"name": feature} for feature in self.weights],
             "params": {"weights": self.weights},
         }

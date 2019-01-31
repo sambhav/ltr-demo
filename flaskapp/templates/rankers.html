@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Learning to Rank Demo</title>
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    <link href="static/css/main.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }} rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }} rel="stylesheet">
   </head>
   <body>
     <div class="container">
@@ -49,8 +49,8 @@
       <!--col -->
     </div>
     {% endif %}
-    <script src="static/js/jquery.js"></script>
-    <script src="static/js/bootstrap.bundle.min.js"></script>
-    <script src="static/js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>

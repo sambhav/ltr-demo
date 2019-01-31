@@ -1,6 +1,15 @@
 import collections
 import random
-from flask import Flask, request, render_template, abort, Response, jsonify
+from flask import (
+    Flask,
+    request,
+    render_template,
+    abort,
+    Response,
+    jsonify,
+    url_for,
+    redirect,
+)
 from flaskapp.constants import DEFAULT_RANKER
 from flaskapp.query import InvalidRankerException, get_results_for_ranker, get_rankers
 from flaskapp.dataset import Dataset
@@ -50,9 +59,13 @@ def stats():
 
 
 @app.route("/ranker", methods=["GET"])
-def ranker():
+def ranker_home():
+    return redirect(url_for("ranker", selected_ranker=DEFAULT_RANKER))
+
+
+@app.route("/ranker/<selected_ranker>", methods=["GET"])
+def ranker(selected_ranker):
     rankers = get_rankers()
-    selected_ranker = request.args.get("ranker", DEFAULT_RANKER)
     if selected_ranker not in rankers:
         return Response("Invalid Ranker"), 404
     results = collections.defaultdict(dict)

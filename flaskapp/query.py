@@ -22,7 +22,7 @@ def get_annotated_queries():
 def get_rankers():
     with open(RANKERS_PATH) as f:
         rankers_data = json.load(f)
-        return list(rankers_data.keys())
+        return rankers_data
 
 
 def get_results(query):
