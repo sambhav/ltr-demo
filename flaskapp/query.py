@@ -25,9 +25,12 @@ def get_annotated_queries():
         return annotations_data.keys()
 
 
-def get_rankers():
+def get_rankers(default=True):
     response = requests.get(SOLR_MODEL_STORE_URL)
-    return [model["name"] for model in response.json()["models"]]
+    models = [model["name"] for model in response.json()["models"]]
+    if not default and DEFAULT_RANKER in models:
+        models.remove(DEFAULT_RANKER)
+    return models
 
 
 def get_results(query):
