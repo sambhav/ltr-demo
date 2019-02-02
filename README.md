@@ -51,8 +51,8 @@ It will train and upload a linear model - once you run it, you can visit `http:/
 ```
 docker exec ltr-demo_webapp_1 ./manage.py train lambdamart 
 ```
-It will train and upload a linear model - once you run it, you can visit `http://localhost:5000/stats` and see the new model. 
-You can train a lambdamart model with more parameters, more details in:
+It will train and upload a tree model - once you run it, you can visit `http://localhost:5000/stats` and see the new model. 
+You can customize the training parameters for the lambdamart model, you can find more details in:
 
 ```
 docker exec ltr-demo_webapp_1 ./manage.py train lambdamart --help
