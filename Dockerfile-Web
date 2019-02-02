@@ -1,5 +1,6 @@
 FROM python:3.7-alpine
-RUN pip install pysolr flask
+RUN apk add gcc g++ gfortran openjdk8-jre
+RUN pip install pysolr flask numpy
 COPY manage.py .
 COPY ./flaskapp ./flaskapp
 RUN mv ./flaskapp/constants.py.docker ./flaskapp/constants.py

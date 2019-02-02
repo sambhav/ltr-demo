@@ -31,4 +31,30 @@ docker-compose up -d webapp
 
 ## Annotations and Training
 
-// TODO
+1. You can use the page at `http://localhost:5000` to annotate queries, just type a query and mark the documents as relevant/not relevant (just click on the button next to each result to flip it).
+
+2. Once that you have your annotations, you can check the performance of the solr baseline model (bm25) by visiting `http://localhost:5000/stats`, if you click on the model name you will see more detail about the performance of the model - and how the model is ranking each single query. 
+
+3. Let's train a model now: 
+```
+docker exec ltr-demo_webapp_1 ./manage.py train 
+```
+To get a help page describing different ways to train a model. 
+
+4. To train and upload a linear model to Apache Solr execute: 
+```
+docker exec ltr-demo_webapp_1 ./manage.py train linear
+```
+It will train and upload a linear model - once you run it, you can visit `http://localhost:5000/stats` and see the new model. 
+
+5. To train and upload a linear model to Apache Solr execute: 
+```
+docker exec ltr-demo_webapp_1 ./manage.py train lambdamart 
+```
+It will train and upload a tree model - once you run it, you can visit `http://localhost:5000/stats` and see the new model. 
+You can customize the training parameters for the lambdamart model, you can find more details in:
+
+```
+docker exec ltr-demo_webapp_1 ./manage.py train lambdamart --help
+```
+
