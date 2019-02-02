@@ -58,9 +58,3 @@ You can train a lambdamart model with more parameters, more details in:
 docker exec ltr-demo_webapp_1 ./manage.py train lambdamart --help
 ```
 
-
-
-
-
-
-
